@@ -1,5 +1,4 @@
 #%%
-import numpy as np
 import pandas as pd
 from jaxstar.utils import correct_gedr3_parallax, correct_kmag
 
