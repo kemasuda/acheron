@@ -11,10 +11,11 @@ input = "input/isoinput_hall.csv"
 agepar, outdir = "log", "posteriors_hall_logage/"
 
 #%%
-input = "input/isoinput_cks.csv"
+input = "../input/isoinput_cks_valid.csv" # skip 3957082 (entry 912)
 agepar, outdir = "log", "posteriors_cks_logage/"
-len(pd.read_csv(input))
-# skip 3957082 (entry 912)
+#d=pd.read_csv(input)
+#d.iloc[919].kepid # 6063220
+#os.system("python single_fit.py %s %s %s %s %s"%(input, outdir, 919, 920, agepar))
 
 #%%
 def run_all():
