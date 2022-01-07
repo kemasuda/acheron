@@ -3,6 +3,7 @@ import jax.numpy as jnp
 import numpyro
 import numpyro.distributions as dist
 from numpyro.infer import init_to_value
+import dill
 
 def define_bins(min, max, d):
     bins = jnp.arange(min, max+1e-10, d)
@@ -94,12 +95,19 @@ class TwodHierarchical():
         mcmc = numpyro.infer.MCMC(kernel, num_warmup=num_warmup, num_samples=num_samples)
         self.mcmc = mcmc
 
-    def run_hmc(self, rng_key, **kwargs):
+    def run_hmc(self, rng_key, save=None, **kwargs):
         self.mcmc.run(rng_key, **kwargs)
         self.mcmc.print_summary()
         self.samples = self.mcmc.get_samples()
+        if save is not None:
+            with open(save+"_mcmc.pkl", "wb") as f:
+                dill.dump(self.mcmc, f)
 
-    def summary_plots(self, rotflag=None):
+    def load_mcmc(self, filepath):
+        self.mcmc = dill.load(open(filepath, 'rb'))
+        self.samples = self.mcmc.get_samples()
+
+    def summary_plots(self, xlabel, ylabel, rotflag=None, show_vals=False, save=None):
         samples = self.samples
         xbins, ybins = self.xbins, self.ybins
         Nxbin, Nybin = self.Nxbin, self.Nybin
@@ -107,12 +115,6 @@ class TwodHierarchical():
         xmin, xmax, ymin, ymax = self.xmin, self.xmax, self.ymin, self.ymax
         xvals, yvals = self.xvals, self.yvals
         n_sample = self.n_sample
-
-        xlabel = 'mass ($M_\odot$)'
-        if self.bin_log:
-            ylabel = '$\log_{10}\mathrm{age\ (Gyr)}$'
-        else:
-            ylabel = 'age (Gyr)'
 
         priors = samples['priors']
         pmean, pstd = jnp.mean(priors, axis=0), jnp.std(priors, axis=0)
@@ -128,6 +130,8 @@ class TwodHierarchical():
         plt.ylim(ymin, ymax)
         plt.colorbar(pad=0.02, label='probability density')
         plt.title("mean prediction")
+        if save is not None:
+            plt.savefig(save+"_2d.png", dpi=200, bbox_inches="tight")
 
         priors_grid = priors.reshape((n_sample, Nybin, Nxbin))
         pxs = jnp.sum(priors_grid, axis=1)*dy
@@ -135,16 +139,18 @@ class TwodHierarchical():
         pxmean, pxstd = jnp.mean(pxs, axis=0), jnp.std(pxs, axis=0)
         pymean, pystd = jnp.mean(pys, axis=0), jnp.std(pys, axis=0)
 
-        for bins, marg, margstd, label, med, (min, max) in zip([xbins, ybins], [pxmean, pymean], [pxstd, pystd], [xlabel, ylabel], [xvals, yvals], [(xmin, xmax), (ymin, ymax)]):
+        for bins, marg, margstd, label, med, (min, max), axis in zip([xbins, ybins], [pxmean, pymean], [pxstd, pystd], [xlabel, ylabel], [xvals, yvals], [(xmin, xmax), (ymin, ymax)], ['x', 'y']):
             plt.figure(figsize=(12,6))
             plt.xlabel(label)
             plt.ylabel("probability density")
             plt.xlim(min, max)
-            if med is not None:
+            if med is not None and show_vals:
                 plt.hist(med, density=True, bins=bins, histtype='step', lw=1, ls='dashed', label='sample medians')
             plt.plot(np.repeat(bins, 2), np.r_[[0], np.repeat(marg, 2), [0]], color='C1', label='prediction (mean \& SD)')
             plt.fill_between(np.repeat(bins, 2), np.r_[[0], np.repeat(marg-margstd, 2), [0]], np.r_[[0], np.repeat(marg+margstd, 2), [0]], color='C1', alpha=0.2)
             plt.legend(loc='best')
+            if save is not None:
+                plt.savefig(save+"_%s.png"%axis, dpi=200, bbox_inches="tight")
 
         if 'fracs' not in samples.keys():
             return None
@@ -167,3 +173,5 @@ class TwodHierarchical():
         plt.ylim(ymin, ymax)
         plt.colorbar(pad=0.02, label='probability density')
         plt.title("mean prediction")
+        if save is not None:
+            plt.savefig(save+"_fracs.png", dpi=200, bbox_inches="tight")
