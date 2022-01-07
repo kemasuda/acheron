@@ -18,6 +18,10 @@ agepar, outdir = "log", "posteriors_cks_logage/"
 #os.system("python single_fit.py %s %s %s %s %s"%(input, outdir, 919, 920, agepar))
 
 #%%
+input = "../input/isoinput_cks_valid.csv" # skip 3957082 (entry 912)
+agepar, outdir = "lin", "posteriors_cks_linage/"
+
+#%%
 def run_all():
     N = len(pd.read_csv(input))
     m = int(N / 10) + 1
@@ -53,5 +57,5 @@ def run_second_half():
         os.system("python single_fit.py %s %s %s %s %s"%(input, outdir, imin, imax, agepar))
 
 #%%
-run_first_half()
-#run_second_half()
+#run_first_half()
+run_second_half()
