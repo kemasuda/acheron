@@ -25,6 +25,9 @@ from hierarchical import TwodHierarchical
 
 #%%
 name, sample_log = "iso_loga_m0.75-1.25", True
+name, sample_log = "iso_lina_m0.75-1.25", False
+name, sample_log = "joint_loga_m0.75-1.25", True
+name, sample_log = "joint_lina_m0.75-1.25", False
 
 #%%
 d = pd.read_csv(name+".csv")
@@ -36,7 +39,7 @@ Nsys, Nsample, _ = np.shape(samples)
 print ('# %s samples for %d stars.'%(Nsample, Nsys))
 
 #%%
-bin_log = True
+bin_log = True * 0
 
 #%%
 xlabel = 'mass ($M_\odot$)'

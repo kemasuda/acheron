@@ -41,7 +41,7 @@ class TwodHierarchical():
             ageprior_correction = self.samples[:,:,1]
             self.L = jnp.array([jnp.sum((_xyidx == k)*ageprior_correction, axis=1) for k in range(self.Nbin)]).T
         else: # lin sampled but log bin
-            ageprior_correction = jnp.exp(-self.samples[:,:,1])
+            ageprior_correction = jnp.exp(-self.samples[:,:,1]) # ??
             self.L = jnp.array([jnp.sum((_xyidx == k)*ageprior_correction, axis=1) for k in range(self.Nbin)]).T
 
         self.idx_valid_mass_age = (Ybins_center < age_upper(Xbins_center))
