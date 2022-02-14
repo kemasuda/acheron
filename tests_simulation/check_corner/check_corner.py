@@ -40,14 +40,13 @@ idx = np.argmin(dists)
 print ((d.teff_true - d.iso_teff)[idx])
 print ((d.feh_true - d.iso_feh)[idx])
 
-
-
 #%%
 #postdir = 'simulated-cks/'
 postdir = '../posteriors_simulated_cks/'
 id = "%05d"%int(idx)
 file = postdir + str(id) + '_samples.csv'
 dp = pd.read_csv(file)
+print ("%d chosen."%idx)
 
 #%%
 keys = ['mass', 'age']
