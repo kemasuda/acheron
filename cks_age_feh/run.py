@@ -26,6 +26,9 @@ from hierarchical import TwodHierarchical
 
 #%%
 name, sample_log = "iso_lina_m0.90-1.00", False
+#name, sample_log = "joint_lina_m0.90-1.00", False
+name, sample_log = "iso_lina_m1.00-1.10", False
+name, sample_log = "iso_lina_m0.80-0.90", False
 
 #%%
 d = pd.read_csv(name+".csv")
@@ -54,6 +57,11 @@ else:
 xmin, xmax, dx  = -0.4, 0.4, 0.05
 
 #%%
+#sidx = (xmin<samples[:,:,0])&(samples[:,:,0]<xmax)&(ymin<samples[:,:,1])&(samples[:,:,1]<ymax)
+#validsample = np.sum(sidx, axis=1) > 0
+#print ("%s stars have no posterior samples in the valid region."%np.sum(~validsample))
+
+#%%
 hm = TwodHierarchical(samples, xmin, xmax, dx, ymin, ymax, dy, bin_log, sample_log, xvals=fmed, yvals=amed)
 
 #%%
@@ -61,11 +69,11 @@ model, gpkernel = 'step', None
 model, gpkernel = 'gp', 'rbf'
 
 #%%
-n_sample = 500
+n_sample = 2000
 hm.setup_hmc(num_warmup=n_sample, num_samples=n_sample, model=model)
 
 #%%
-#rflag = np.array(rotflag).astype(float)
+rflag = np.array(rotflag).astype(float)
 rflag = None
 
 #%%
@@ -76,7 +84,7 @@ outname += "_n%d"%(n_sample)
 outname
 
 #%%
-resume = True * 0
+resume = True
 
 #%%
 mcmcfile = outname+"_mcmc.pkl"
