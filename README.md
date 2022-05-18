@@ -1,2 +1,2 @@
 # acheron
-ages of Kepler stars with rotational modulation
+ages of Kepler stars with (and without) rotational modulation
