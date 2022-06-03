@@ -19,6 +19,7 @@ d.to_csv("isoinput_hall.csv", index=False)
 #%%
 d = pd.read_csv("isoinput_cks.csv")
 d = d[d.kepid!=3957082].reset_index(drop=True)
+len(d)
 
 #%% get rotation info
 import numpy as np
@@ -50,7 +51,16 @@ print ('ACF sample: %d'%len(drotm15))
 print ('Prot assigned: %d'%np.sum(drotm15.Prot==drotm15.Prot))
 
 #%%
-dmerged = pd.merge(d, drot[['kepid', 'acf', 'Prot', 'e_Prot', 'Rvar', 'LPH', 'w', 'D', 'N', 'C', 'G', 'T', 'F', 'R', 'M1', 'M2']], how='left')
+dmerged = pd.merge(d, drot[['kepid', 'acf', 'Prot', 'e_Prot', 'Rvar', 'LPH', 'w', 'D', 'N', 'C', 'G', 'T', 'F', 'R', 'M1', 'M2']], how='left', on='kepid')
+
+#%% 
+_dmerged = pd.merge(d, drot[['kepid', 'acf', 'Prot', 'e_Prot', 'Rvar', 'LPH', 'w', 'D', 'N', 'C', 'G', 'T', 'F', 'R', 'M1', 'M2']], on='kepid')
+print (len(_dmerged))
+print (np.sum(_dmerged.acf))
 
 #%%
 dmerged.reset_index(drop=True).to_csv("isoinput_cks_valid.csv", index=False)
+
+#%%
+len(dmerged)
+dmerged[dmerged.kepid==5369827].Prot

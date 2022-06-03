@@ -25,9 +25,11 @@ from hierarchical import TwodHierarchical
 
 #%%
 #name, sample_log = "iso_loga_m0.75-1.25", True
-name, sample_log = "iso_lina_m0.75-1.25", False
-name, sample_log = "joint_loga_m0.75-1.25", True
+#name, sample_log = "iso_lina_m0.75-1.25", False
+#name, sample_log = "joint_loga_m0.75-1.25", True
 #name, sample_log = "joint_lina_m0.75-1.25", False
+name, sample_log = "iso_lina_m0.70-1.30/iso_lina_m0.70-1.30", False
+name, sample_log = "joint_lina_m0.70-1.30/joint_lina_m0.70-1.30", False
 
 #%%
 d = pd.read_csv(name+".csv")
@@ -49,7 +51,7 @@ if bin_log:
     ylabel = '$\log_{10}\mathrm{age\ (Gyr)}$'
     name = "logb_" + name
 else:
-    ymin, ymax, dy = 0, 14, 1
+    ymin, ymax, dy = 0, 14, 1*0.5
     ylabel = 'age (Gyr)'
 
 #%%
@@ -68,7 +70,7 @@ hm.setup_hmc(num_warmup=n_sample, num_samples=n_sample, model=model)
 
 #%%
 rflag = np.array(rotflag).astype(float)
-#rflag = None
+rflag = None
 
 #%%
 outname = name + "_" + model
@@ -76,6 +78,9 @@ if 'gp' in outname:
     outname += "-" + gpkernel
 outname += "_n%d"%(n_sample)
 outname
+
+#%%
+outname += "_ax2"
 
 #%%
 resume = True
@@ -143,6 +148,9 @@ rotfracs_grid = rotfracs.reshape((n_sample, Nybin, Nxbin))
 ms = np.array([0.75, 0.85, 0.95, 1.05, 1.15, 1.25, 1.3])
 
 #%%
+ddet = pd.read_csv("detection_model/"+name.split("/")[0]+"_det.csv")
+
+#%%
 fig, ax = plt.subplots(3, 2, figsize=(16*0.9, 9.6*0.9), sharex=True, sharey=True)
 #plt.xlim(0., 14)
 plt.xlim(ybins[0], ybins[-1])
@@ -169,6 +177,9 @@ for i, (ml, mu) in enumerate(zip(ms[:-1], ms[1:])):
     # peak & HDI
     ax[i%3, i//3].errorbar(ybins_center, yvals, yerr=[ylows, yupps], fmt='o', label=label, #mfc='white',
     lw=1, capsize=4, color='steelblue', markersize=7)
+
+    if title!='all mass':
+        ax[i%3, i//3].plot(ddet['a%02d'%(5*(ml+mu))], ddet['m%02d'%(5*(ml+mu))], lw=3, ls='dashed', alpha=0.6, color='tan')
 
     # mean
     ymean = np.mean(ysmp, axis=0)

@@ -16,11 +16,26 @@ rc('text', usetex=True)
 plt.rcParams['figure.facecolor'] = 'white'
 
 #%%
+postdir, idx = '../posteriors_simulated_cks/', 1408-1408+3989
+id = "%05d"%int(idx)
+file = postdir + str(id) + '_samples.csv'
+dp = pd.read_csv(file)
+
+#%%
+keys = ['mass', 'age', 'teff', 'feh', 'kmag', 'parallax']
+truths = np.array(d.loc[idx][[k+"_true" for k in keys]])
+fig = corner.corner(dp[keys], truths=truths, show_titles=True, title_fmt='.2f')
+#plt.savefig(outdir+"%04d.png"%int(idx), dpi=200, bbox_inches="tight")
+
+#%%
 #d = pd.read_csv("check_recovery_merged.csv")
 #outdir = 'check_recovery_corner/'
 
 d = pd.read_csv("../simulated-cks_results.csv")
 outdir = './'
+
+#%%
+d.iloc[3989]
 
 #%%
 #_mass, _age, _feh = 1.15, 6.0, 0.0
@@ -66,9 +81,3 @@ for i in range(len(keys)):
     ax.set_title(("truth: %s"%fmts[i])%truths[i]+("\n 16/50/84\,th: $%s^{+%s}_{-%s}$"%(fmts[i], fmts[i], fmts[i]))%(isos[i], isos_upp[i], isos_low[i]), fontsize=18)
     ax.axvline(x=isos[i], alpha=0.8, color='gray', ls='dashed', lw=1.5)
 #plt.savefig(outdir+"ma_%04d.png"%int(idx), dpi=200, bbox_inches="tight")
-
-#%%
-keys = ['mass', 'age', 'teff', 'feh', 'kmag', 'parallax']
-truths = np.array(d.loc[idx][[k+"_true" for k in keys]])
-fig = corner.corner(dp[keys], truths=truths, show_titles=True, title_fmt='.2f')
-#plt.savefig(outdir+"%04d.png"%int(idx), dpi=200, bbox_inches="tight")
