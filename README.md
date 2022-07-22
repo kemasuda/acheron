@@ -26,6 +26,7 @@ Code for reproducing the analyses in: "Detectability of Rotational Modulation in
 
 
 -  tests_astero: comparison with asteroseismic stars in Section 2.3.
+-  input: star info
 
 
 
