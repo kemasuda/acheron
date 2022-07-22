@@ -12,7 +12,7 @@ Infer the fraction of stars with Prot detection as a function of mass and age fo
 
 - tests_simulation
 
-Results of the injection-recovery tests in Section 2.2 and in Section 4.2.
+Results of the injection-recovery tests in Section 2.2 and in Section 4.3.
 
 -  tests_astero
 
@@ -22,6 +22,6 @@ Comparison with asteroseismic stars in Section 2.3.
 
 ## Rotational modulation amplitude vs rotation period/Rossby number
 
-Notebooks used in: "On the Evolution of Rotational Modulation Amplitude in Solar-mass Main-Sequence Stars," (Masuda 2022a, ApJ accepted) https://arxiv.org/abs/2206.01595
+Notebooks used in: "On the Evolution of Rotational Modulation Amplitude in Solar-mass Main-sequence Stars," (Masuda 2022a, ApJ accepted) https://arxiv.org/abs/2206.01595
 
 - kepler_prot_teff
