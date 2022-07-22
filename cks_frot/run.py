@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import corner
 import glob, dill, sys, os
-#%matplotlib inline
+from jhbayes import TwodHierarchical
 
 #%%
 import seaborn as sns
@@ -21,15 +21,9 @@ from jax.config import config
 config.update('jax_enable_x64', True)
 
 #%%
-from hierarchical import TwodHierarchical
-
-#%%
-#name, sample_log = "iso_loga_m0.75-1.25", True
-#name, sample_log = "iso_lina_m0.75-1.25", False
-#name, sample_log = "joint_loga_m0.75-1.25", True
-#name, sample_log = "joint_lina_m0.75-1.25", False
-name, sample_log = "iso_lina_m0.70-1.30/iso_lina_m0.70-1.30", False
-name, sample_log = "joint_lina_m0.70-1.30/joint_lina_m0.70-1.30", False
+#name, sample_log, bin_log = "iso_lina_m0.70-1.30", False, False
+#name, sample_log, bin_log = "joint_lina_m0.70-1.30", False, False
+name, sample_log, bin_log = sys.argv[1], False, False
 
 #%%
 d = pd.read_csv(name+".csv")
@@ -41,24 +35,17 @@ Nsys, Nsample, _ = np.shape(samples)
 print ('# %s samples for %d stars.'%(Nsample, Nsys))
 
 #%%
-bin_log = True * 0
-
-#%%
 xlabel = 'mass ($M_\odot$)'
-if bin_log:
-    ymin, ymax, dy = 8, 10.14, 0.15
-    amed = np.log10(amed*1e9)
-    ylabel = '$\log_{10}\mathrm{age\ (Gyr)}$'
-    name = "logb_" + name
-else:
-    ymin, ymax, dy = 0, 14, 1*0.5
-    ylabel = 'age (Gyr)'
-
-#%%
 xmin, xmax, dx  = 0.7, 1.3, 0.05
+ymin, ymax, dy = 0, 14, 1
+ylabel = 'age (Gyr)'
 
 #%%
-hm = TwodHierarchical(samples, xmin, xmax, dx, ymin, ymax, dy, bin_log, sample_log, xvals=mmed, yvals=amed)
+def valid_mass_age(mass, age):
+    return age < -30 * (mass-1.25) + 5.
+
+#%%
+hm = TwodHierarchical(samples, xmin, xmax, dx, ymin, ymax, dy, bin_log, sample_log, xvals=mmed, yvals=amed, valid_xybin_func=valid_mass_age)
 
 #%%
 model, gpkernel = 'step', None
@@ -70,17 +57,13 @@ hm.setup_hmc(num_warmup=n_sample, num_samples=n_sample, model=model)
 
 #%%
 rflag = np.array(rotflag).astype(float)
-rflag = None
 
 #%%
-outname = name + "_" + model
+outname = "results/" + name + "_" + model
 if 'gp' in outname:
     outname += "-" + gpkernel
 outname += "_n%d"%(n_sample)
 outname
-
-#%%
-outname += "_ax2"
 
 #%%
 resume = True
@@ -141,14 +124,14 @@ Nxbin, Nybin = hm.Nxbin, hm.Nybin
 xbins, ybins, xbins_center, ybins_center = hm.xbins, hm.ybins, hm.xbins_center, hm.ybins_center
 priors_grid = hm.samples['priors'].reshape((n_sample, Nybin, Nxbin))
 rotfracs = np.array(hm.samples['fracs'])
-rotfracs[:,~hm.idx_valid_mass_age] = np.nan
+rotfracs[:,~hm.idx_valid_xybin] = np.nan
 rotfracs_grid = rotfracs.reshape((n_sample, Nybin, Nxbin))
 
 #%%
 ms = np.array([0.75, 0.85, 0.95, 1.05, 1.15, 1.25, 1.3])
 
 #%%
-ddet = pd.read_csv("detection_model/"+name.split("/")[0]+"_det.csv")
+ddet = pd.read_csv("detection_model/"+name+"_det.csv")
 
 #%%
 fig, ax = plt.subplots(3, 2, figsize=(16*0.9, 9.6*0.9), sharex=True, sharey=True)
@@ -196,6 +179,7 @@ plt.tight_layout()
 plt.savefig(outname+"_violin.png", dpi=200, bbox_inches="tight")
 
 #%% check KDE width
+"""
 reflect = True
 for i in range(len(ybins)-1):
     _y = ysmp[:,i]
@@ -207,3 +191,4 @@ for i in range(len(ybins)-1):
     else:
         plt.hist(_y, bins=100, density=True)
         plt.plot(f0, kde(_y, bw_method=bw_method)(f0));
+"""
