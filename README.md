@@ -2,9 +2,7 @@ ages of Kepler stars with (and without) rotational modulation
 
 
 
-### Detectabiltiy of rotational modulation as a function of age
-
-***
+## Detectabiltiy of rotational modulation as a function of age
 
 Code for reproducing the analyses in: "Detectability of Rotational Modulation in Kepler Sun-like Stars as a Function of Age," (Masuda 2022b, ApJ submitted). 
 
@@ -22,9 +20,7 @@ Comparison with asteroseismic stars in Section 2.3.
 
 
 
-### Rotational modulation amplitude vs rotation period/Rossby number
-
-***
+## Rotational modulation amplitude vs rotation period/Rossby number
 
 Notebooks used in: "On the Evolution of Rotational Modulation Amplitude in Solar-mass Main-Sequence Stars," (Masuda 2022a, ApJ accepted) https://arxiv.org/abs/2206.01595
 
