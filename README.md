@@ -8,15 +8,15 @@ Code for reproducing the analyses in: "Detectability of Rotational Modulation in
 
 - cks_frot
 
-Infer the fraction of stars with Prot detection as a function of mass and age for the CKS stars (Section 3,4,5 of the paper). Depends on [jhbayes](https://github.com/kemasuda/jhbayes) for hierarhical modeling and [jaxstar](https://github.com/kemasuda/jaxstar) for obtaining posterior samples from isochrone fitting via Hamiltonian Monte Carlo. The posterior samples are not in this repository but avaialble from the author.
+​		Infer the fraction of stars with Prot detection as a function of mass and age for the CKS stars (Section 3,4,5 of the paper). Depends on [jhbayes](https://github.com/kemasuda/jhbayes) for hierarhical modeling and [jaxstar](https://github.com/kemasuda/jaxstar) for obtaining posterior samples from isochrone fitting via Hamiltonian Monte Carlo. The posterior samples are not in this repository but avaialble from the author.
 
 - tests_simulation
 
-Results of the injection-recovery tests in Section 2.2.
+​		Results of the injection-recovery tests in Section 2.2.
 
 -  tests_astero
 
-Comparison with asteroseismic stars in Section 2.3.
+​		Comparison with asteroseismic stars in Section 2.3.
 
 
 
