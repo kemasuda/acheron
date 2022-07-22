@@ -6,17 +6,26 @@ ages of Kepler stars with (and without) rotational modulation
 
 Code for reproducing the analyses in: "Detectability of Rotational Modulation in Kepler Sun-like Stars as a Function of Age," (Masuda 2022b, ApJ submitted). 
 
-- cks_frot
+- cks_frot: infer the fraction of stars with rotation period detection as a function of mass and age for the CKS stars (Section 3 and 5 of the paper). Depends on [jhbayes](https://github.com/kemasuda/jhbayes) for hierarhical modeling.
 
-Infer the fraction of stars with Prot detection as a function of mass and age for the CKS stars (Section 3 and 5 of the paper). Depends on [jhbayes](https://github.com/kemasuda/jhbayes) for hierarhical modeling and [jaxstar](https://github.com/kemasuda/jaxstar) for obtaining posterior samples from isochrone fitting via Hamiltonian Monte Carlo. The posterior samples are not in this repository but avaialble from the author.
+  - plots: main results
 
-- tests_simulation
+  - detectability: comparison of modulation amplitudes in Mazeh+15 and McQuillan+14 samples (Section 6.1)
 
-Results of the injection-recovery tests in Section 2.2 and in Section 4.3.
+  - detection_model: simple detection model used in Figures 12 and 13
 
--  tests_astero
+- posterior_samples: posterior samples from isochrone fitting (avaialble from the author) obtained with Hamiltonian Monte Carlo using [jaxstar](https://github.com/kemasuda/jaxstar).
+  - posteriors_cks_linage2: isochrone-only results for the CKS sample
+  - posteriors_cksjoint_linage2: joint isochrone-gyrochrone results for the CKS sample
+  - posteriors_hall_linage: isochrone-only results for the asteroseismic sample (Section 2.3)
 
-Comparison with asteroseismic stars in Section 2.3.
+- tests_simulation: test results using simulated data (Section 2.2, Section 4.3)
+  - input: information of the simulated stars
+  - posteriors_simulated_cks3: posterior samples from isochrone fitting (just include one case here; avaialble from the author)
+  - hierarchical_recovery: inference of the mass-age distribution
+
+
+-  tests_astero: comparison with asteroseismic stars in Section 2.3.
 
 
 
