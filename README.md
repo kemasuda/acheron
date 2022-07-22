@@ -1,10 +1,10 @@
-ages of Kepler stars with (and without) rotational modulation
+:hourglass_flowing_sand: ages of Kepler stars with (and without) rotational modulation :star:
 
 
 
 ## Detectabiltiy of rotational modulation as a function of age
 
-Code for reproducing the analyses in: "Detectability of Rotational Modulation in Kepler Sun-like Stars as a Function of Age," (Masuda 2022b, ApJ submitted). 
+Code for: "Detectability of Rotational Modulation in Kepler Sun-like Stars as a Function of Age," (Masuda 2022b, ApJ submitted). 
 
 - cks_frot: infer the fraction of stars with rotation period detection as a function of mass and age for the CKS stars (Section 3 and 5 of the paper). Depends on [jhbayes](https://github.com/kemasuda/jhbayes) for hierarhical modeling.
 
